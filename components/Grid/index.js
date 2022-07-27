@@ -1,6 +1,7 @@
-import Link from 'next/link'
-import styled, { css } from 'styled-components'
-import { truncateText } from '@l/utils'
+import Link from "next/link";
+import styled, { css } from "styled-components";
+import { truncateText } from "@l/utils";
+import { Fragment } from "react";
 
 const CardStyle = css`
   margin: 1rem;
@@ -12,6 +13,7 @@ const CardStyle = css`
   border: 1px solid var(--gallery-grey);
   border-radius: 10px;
   transition: 150ms ease;
+  width: 100%;
 
   :hover,
   :focus,
@@ -30,42 +32,59 @@ const CardStyle = css`
     font-size: 1.25rem;
     line-height: 1.5;
   }
-`
+`;
 
 const StyledGrid = styled.div`
   display: flex;
   align-items: center;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: ${(props) => (props.grid ? "row" : "column")};
+  flex-wrap: ${(props) => (props.grid ? "wrap" : "nowrap")};
   margin-top: 1rem;
   width: 100%;
+  justify-content: center;
 
   @media (min-width: 600px) {
-    width: auto;
-    flex-direction: row;
+    width: ${(props) => (props.grid ? "100%" : "50vw")};
+    flex-direction: ${(props) => (props.grid ? "row" : "column")};
   }
-`
+`;
 
-export function Card({ children, header, href, title }) {
+export function Card({
+  children,
+  header,
+  href,
+  title,
+  startTime,
+  ticketPrice,
+  grid,
+}) {
   return href ? (
     <Link href={href} passHref>
       <a css={CardStyle} title={title}>
         <h3>{header} &rarr;</h3>
         {children}
+        {!grid && (
+          <Fragment>
+            <p style={{ fontWeight: 600, margin: "5px 0" }}>{startTime}</p>
+            <p style={{ fontWeight: 600 }}>{ticketPrice}</p>
+          </Fragment>
+        )}
       </a>
     </Link>
   ) : (
     <div css={CardStyle} title={title}>
       <h3 title={header}>{truncateText(header, 22)} &rarr;</h3>
       {children}
+      {!grid && (
+        <Fragment>
+          <p style={{ fontWeight: 600, margin: "5px 0" }}>{startTime}</p>
+          <p style={{ fontWeight: 600 }}>{ticketPrice}</p>
+        </Fragment>
+      )}
     </div>
-  )
+  );
 }
 
-export function Grid({ children }) {
-  return (
-    <StyledGrid>
-      {children}
-    </StyledGrid>
-  )
+export function Grid({ children, grid }) {
+  return <StyledGrid grid={grid}>{children}</StyledGrid>;
 }
