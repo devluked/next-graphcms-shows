@@ -6,6 +6,7 @@ import { Title } from "@c/Title";
 import { getShowBySlug } from "@l/graphcms";
 import { formatUSD, formatDate } from "@l/utils";
 import { useRouter } from "next/router";
+import BackButton from "@c/BackButton";
 
 const Markdown = styled(ReactMarkdown)`
   img {
@@ -54,6 +55,7 @@ export default function Shows({ show }) {
       padding="0 2em"
     >
       <Title>{show.title}</Title>
+      <BackButton onClick={() => router.push("/shows")}> &lt;- Back</BackButton>
 
       <FlexyRow>
         <span>Price: {formatUSD(show.ticketPrice)}</span>

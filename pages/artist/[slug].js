@@ -4,6 +4,7 @@ import Layout from "@c/Layout";
 import FlexyRow from "@c/FlexyRow";
 import { getArtistBySlug } from "@l/graphcms";
 import { useRouter } from "next/router";
+import BackButton from "@c/BackButton";
 
 const Markdown = styled(ReactMarkdown)`
   img {
@@ -26,17 +27,6 @@ const ArtistPhoto = styled.div`
   border-radius: 100px;
   border: 4px solid currentColor;
   margin: 3rem auto;
-`;
-
-const BackButton = styled.h2`
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 2rem;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 const Portrait = ({ images = [] }) => {
