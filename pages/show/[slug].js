@@ -5,6 +5,7 @@ import FlexyRow from "@c/FlexyRow";
 import { Title } from "@c/Title";
 import { getShowBySlug } from "@l/graphcms";
 import { formatUSD, formatDate } from "@l/utils";
+import { useRouter } from "next/router";
 
 const Markdown = styled(ReactMarkdown)`
   img {
@@ -16,6 +17,8 @@ const Markdown = styled(ReactMarkdown)`
 
 const ArtistName = styled.h2`
   text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
 `;
 
 const ArtistPhoto = styled.div`
@@ -27,17 +30,23 @@ const ArtistPhoto = styled.div`
   border-radius: 100px;
   border: 4px solid currentColor;
   margin: 0 auto;
+  cursor: pointer;
+  &:hover {
+    border: 8px solid currentColor;
+  }
 `;
 
-const Portrait = ({ images = [] }) => {
+const Portrait = ({ images = [], onClick }) => {
   if (images.length > 0) {
     const img = images[0];
-    return <ArtistPhoto imageUrl={img.url} />;
+    return <ArtistPhoto onClick={onClick} imageUrl={img.url} />;
   }
   return null;
 };
 
 export default function Shows({ show }) {
+  const router = useRouter();
+
   return (
     <Layout
       title={`${show.title} / next-graphcms-shows`}
@@ -55,33 +64,14 @@ export default function Shows({ show }) {
 
       {show.artists.map((artist) => (
         <div key={artist.id}>
-          <ArtistName>{artist.fullName}</ArtistName>
+          <ArtistName onClick={() => router.push(`/artist/${artist.slug}`)}>
+            {artist.fullName}
+          </ArtistName>
 
-          <Portrait images={artist.images} />
-
-          <FlexyRow justify="flex-start">
-            <a
-              href={
-                !/^https?:\/\//i.test(artist.webUrl)
-                  ? "https://" + artist.webUrl
-                  : artist.webUrl
-              }
-              target="_blank"
-            >
-              Website
-            </a>
-            <a href={artist.facebookUrl} target="_blank">
-              Facebook
-            </a>
-            <a href={artist.instagramUrl} target="_blank">
-              Instagram
-            </a>
-            <a href={artist.youTubeUrl} target="_blank">
-              YouTube
-            </a>
-          </FlexyRow>
-
-          <Markdown source={artist.bio} />
+          <Portrait
+            onClick={() => router.push(`/artist/${artist.slug}`)}
+            images={artist.images}
+          />
         </div>
       ))}
     </Layout>
