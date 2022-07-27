@@ -60,7 +60,14 @@ export default function Shows({ show }) {
           <Portrait images={artist.images} />
 
           <FlexyRow justify="flex-start">
-            <a href={artist.webUrl} target="_blank">
+            <a
+              href={
+                !/^https?:\/\//i.test(artist.webUrl)
+                  ? "https://" + artist.webUrl
+                  : artist.webUrl
+              }
+              target="_blank"
+            >
               Website
             </a>
             <a href={artist.facebookUrl} target="_blank">
